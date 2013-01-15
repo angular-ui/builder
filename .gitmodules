@@ -1,3 +1,6 @@
 [submodule "bootstrap"]
 	path = bootstrap
 	url = https://github.com/angular-ui/bootstrap
+[submodule "angular-ui"]
+	path = angular-ui
+	url = https://github.com/angular-ui/angular-ui
