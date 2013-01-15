@@ -1,4 +1,7 @@
 node_modules
 npm-debug.log
 *.html.js
+dist
+*.zip
+*.swp
 
