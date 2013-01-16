@@ -45,7 +45,6 @@ function build(repo, modules, builddir, buildArchive) {
     child.stderr.on('data', function(d) {
       deferred.reject(d.toString());
     });
-    child.stdout.on('data',function(d){console.log(d.toString());});
     child.on('exit', function(code) {
       if (!code) { deferred.resolve(); }
     });
