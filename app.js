@@ -18,15 +18,7 @@ app.use(express.bodyParser());
 app.use(express.logger());
 app.use(express['static']("$0/bootstrap/dist".format(__dirname)));
 
-<<<<<<< HEAD
 function build(repo, modules, builddir, buildArchive) {
-=======
-function build(repo, modules) {
-  //sort so modules are always in same order
-  var modulesStr = modules.sort().join('-');
-  var builddir = 'dist-$0/$1'.format(repo, modulesStr);
-  var buildArchive = '$0/build.zip'.format(builddir);
->>>>>>> 57b16cd... Make it cache
   function grunt() {
     var deferred = Q.defer();
     var child = child_process.spawn('grunt', [
@@ -35,10 +27,8 @@ function build(repo, modules) {
       'build:$0'.format(modules.join(':'))
     ]);
     child.stderr.on('data', function(data) {
-      console.log(data);
       deferred.reject(data.toString());
     });
-    child.stdout.on('data',function(d){console.log(d.toString());});
     child.on('exit', function(code, signal) {
       if (!code) { deferred.resolve(); }
     });
@@ -49,39 +39,22 @@ function build(repo, modules) {
     var files = fs.readdirSync(builddir).map(function(file) {
       return '$0/$1'.format(builddir, file);
     });
-    console.log(files);
     var child = child_process.spawn('zip', [
-<<<<<<< HEAD
       '-j', buildArchive
-=======
-      '--no-dir-entries', buildArchive
->>>>>>> 57b16cd... Make it cache
     ].concat(files));
     child.stderr.on('data', function(d) {
-      console.log(d.toString());
       deferred.reject(d.toString());
     });
     child.stdout.on('data',function(d){console.log(d.toString());});
     child.on('exit', function(code) {
-      console.log('exiting', code);
-<<<<<<< HEAD
       if (!code) { deferred.resolve(); }
-=======
-      if (!code) { deferred.resolve(buildArchive); }
->>>>>>> 57b16cd... Make it cache
     });
     return deferred.promise;
   }
 
   if (fs.existsSync(builddir)) {
-<<<<<<< HEAD
     return Q.fcall(function() {});
   }
-=======
-    return Q.fcall(function() { return buildArchive; });
-  }
-  console.log('grunting');
->>>>>>> 57b16cd... Make it cache
   return grunt().then(zip);
 }
 
@@ -108,7 +81,6 @@ app.get('/ui-mason/angular-ui', function(req, res, next) {
   res.json({ modules: modules });
 });
 
-<<<<<<< HEAD
 app.get("/ui-mason/:repo/download", function(req, res, next) {
   var modules = req.query.modules;
   var repo = req.params.repo;
@@ -121,32 +93,10 @@ app.get("/ui-mason/:repo/download", function(req, res, next) {
     var buildArchive = "$0/$1".format(builddir, "build.zip");
     build(repo, modules, builddir, buildArchive).then(function() {
       res.download(buildArchive, '$0-custom.zip'.format(req.params.repo));
-=======
-app.post("/ui-mason/:repo", function(req, res, next) {
-  if (req.params.repo != 'angular-ui' && req.params.repo != 'bootstrap') {
-    res.send(400, 'Request must be for bootstrap or angular-ui repo');
-  } else if (req.body && !Array.isArray(req.body.modules)) {
-    res.send(400, "Data must be in format '{modules: [arrayOfNames]}'");
-  } else {
-    build(req.params.repo, req.body.modules).then(function(buildArchive) {
-      //Send back the full url including hostname to download the zip at
-      res.send(200, '$0/ui-mason/$1/download/$2'
-        .format(req.headers.host, req.params.repo, buildArchive));
->>>>>>> 57b16cd... Make it cache
     }, function(err) {
       res.send(500, err);
     });
   }
 });
-<<<<<<< HEAD
-=======
-app.get("/ui-mason/:repo/download/:zip", function(req, res, next) {
-  if (fs.existsSync(req.params.zip)) {
-    res.download(req.params.zip, 'ui-$0-custom.zip'.format(req.params.repo));
-  } else {
-    res.send(400, "Given download path does not exist");
-  }
-});
->>>>>>> 57b16cd... Make it cache
 
 module.exports = app;
