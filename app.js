@@ -58,18 +58,18 @@ function build(repo, modules, builddir, buildArchive) {
 }
 
 //CORS
-app.all('/ui-mason/*', function(req, res, next) {
+app.all('/api/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
 
 //Get bootstrap modules
-app.get("/ui-mason/bootstrap", function(req, res, next) {
+app.get("/api/bootstrap", function(req, res, next) {
   res.json({ modules: fs.readdirSync('bootstrap/src/') });
 });
 //Get angular-ui modules
-app.get('/ui-mason/angular-ui', function(req, res, next) {
+app.get('/api/angular-ui', function(req, res, next) {
   var modules = [];
   var baseDir = 'angular-ui/modules';
   fs.readdirSync(baseDir).forEach(function(dir) {
@@ -80,7 +80,7 @@ app.get('/ui-mason/angular-ui', function(req, res, next) {
   res.json({ modules: modules });
 });
 
-app.get("/ui-mason/:repo/download", function(req, res, next) {
+app.get("/api/:repo/download", function(req, res, next) {
   var modules = req.query.modules;
   var repo = req.params.repo;
   if (req.params.repo != 'angular-ui' && req.params.repo != 'bootstrap') {
