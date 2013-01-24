@@ -66,7 +66,7 @@ app.all('/api/*', function(req, res, next) {
 
 //Get bootstrap modules
 app.get("/api/bootstrap", function(req, res, next) {
-  res.json({ modules: fs.readdirSync('bootstrap/src/') });
+  res.json({ modules: fs.readdirSync('bootstrap/src/').sort() });
 });
 //Get angular-ui modules
 app.get('/api/angular-ui', function(req, res, next) {
@@ -77,7 +77,7 @@ app.get('/api/angular-ui', function(req, res, next) {
       modules.push(moduleName);
     });
   });
-  res.json({ modules: modules });
+  res.json({ modules: modules.sort() });
 });
 
 app.get("/api/:repo/download", function(req, res, next) {
