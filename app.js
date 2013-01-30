@@ -20,6 +20,7 @@ app.use(express['static']("$0/bootstrap/dist".format(__dirname)));
 
 function build(repo, modules, builddir, buildArchive) {
   function grunt() {
+    console.log("GRUNT!");
     var deferred = Q.defer();
     var child = child_process.spawn('grunt', [
       '--config=$0/grunt.js'.format(repo),
@@ -27,8 +28,10 @@ function build(repo, modules, builddir, buildArchive) {
       'build:$0'.format(modules.join(':'))
     ]);
     child.stderr.on('data', function(data) {
+      console.log("err",data.toString());
       deferred.reject(data.toString());
     });
+    child.stdout.on('data',function(d){console.log(d.toString())});
     child.on('exit', function(code, signal) {
       if (!code) { deferred.resolve(); }
     });
@@ -82,6 +85,9 @@ app.get('/api/angular-ui', function(req, res, next) {
 
 app.get("/api/:repo/download", function(req, res, next) {
   var modules = req.query.modules;
+  if (typeof modules == 'string') {
+    modules = [modules];
+  }
   var repo = req.params.repo;
   if (req.params.repo != 'angular-ui' && req.params.repo != 'bootstrap') {
     res.send(400, 'Request must be for bootstrap or angular-ui repo');
