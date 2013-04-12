@@ -1,5 +1,4 @@
 
 # Run this when updating
-default:
+clean:
 	rm -rf dist-*
-

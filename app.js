@@ -20,13 +20,13 @@ app.use(express['static']("$0/bootstrap/dist".format(__dirname)));
 
 function build(repo, modules, builddir, buildArchive) {
   function grunt() {
-    console.log("GRUNT!");
     var deferred = Q.defer();
     var child = child_process.spawn('grunt', [
-      '--config=$0/grunt.js'.format(repo),
       'dist:../$0'.format(builddir),
       'build:$0'.format(modules.join(':'))
-    ]);
+    ], {
+      cwd: repo
+    });
     child.stderr.on('data', function(data) {
       console.log("err",data.toString());
       deferred.reject(data.toString());
