@@ -4,9 +4,9 @@ GITDIR_UI = --git-dir=angular-ui/.git
 # Run this when updating
 update:
 	rm -rf dist-*
-	git ${GITDIR_BOOT} fetch origin
+	git ${GITDIR_BOOT} pull origin master --tags
 	git ${GITDIR_BOOT} describe --tags --abbrev=0 | xargs git ${GITDIR_BOOT} checkout 
-	git ${GITDIR_UI} fetch origin
+	git ${GITDIR_UI} pull origin master --tags
 	git ${GITDIR_UI} describe --tags --abbrev=0 | xargs git ${GITDIR_UI} checkout 
 	forever stop builder.js
 
