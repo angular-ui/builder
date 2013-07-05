@@ -23,6 +23,7 @@ function build(repo, modules, builddir, buildArchive) {
     var deferred = Q.defer();
     var child = child_process.spawn('grunt', [
       'dist:../$0'.format(builddir),
+      repo == 'bootstrap' ? 'html2js' : '',
       'build:$0'.format(modules.join(':'))
     ], {
       cwd: repo
